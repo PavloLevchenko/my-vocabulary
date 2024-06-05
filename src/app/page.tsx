@@ -2,26 +2,46 @@
 
 import styles from "./page.module.css";
 import useSWR from "swr";
-import { fetcher } from "@/api";
-import React from "react";
-import { useState } from "react";
+import { fetcher, setCorrectIndex } from "@/api";
+import { handleKeyDown } from "@/api/slider";
+import React, { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { setWord } from "@/redux/operations";
-import { getWord } from "@/redux/selectors";
+import { getWords } from "@/redux/selectors";
 import { FlipButton } from "@/components/FlipButton";
 import { Header } from "@/components/Header";
 
 export default function Home() {
 	//const { data } = useSWR<any>(`wb/snippet/?q=Haus`, fetcher);
 	const [index, setIndex] = useState(0);
-	const current = useAppSelector(getWord);
+	const [increment, setIncrement] = useState(0);
+	const [current, setCurrent] = useState("");
+	const [keysFocus, setKeysFocus] = useState(false);
+	const words = useAppSelector(getWords);
 	const dispatch = useAppDispatch();
-	dispatch(setWord(index));
 
-	const setCorrectIndex = (n: number) => {
-		const i = n > 0 ? n : 0;
-		setIndex(i);
-	};
+	useEffect(() => {
+		dispatch(setWord(index));
+	}, [dispatch, index]);
+
+	useEffect(() => {
+		setCurrent(words[index]);
+	}, [index, words]);
+
+	useEffect(() => {
+		setIndex(oldIndex => setCorrectIndex(oldIndex, increment, words.length));
+		setIncrement(0);
+	}, [increment, words]);
+
+	useEffect(() => {
+		const onKeyDown = (event: any) => setIncrement(handleKeyDown(event));
+		setKeysFocus(true);
+		window.addEventListener("keydown", onKeyDown);
+
+		return () => {
+			window.removeEventListener("keydown", onKeyDown);
+		};
+	}, []);
 
 	return (
 		<main className={styles.main}>
@@ -31,20 +51,42 @@ export default function Home() {
 			<div className={styles.center}>{current}</div>
 
 			<div className={styles.grid}>
-				<FlipButton text="New" description="Start again" onClick={() => setCorrectIndex(0)} />
+				<FlipButton
+					text="New"
+					arrow="*"
+					description="Start again"
+					onClick={() => setIndex(0)}
+					checkOver={setKeysFocus}
+					keysFocus={keysFocus}
+				/>
 				<FlipButton
 					text="Prevew"
+					arrow="&lt;-"
 					description="Show previous word"
-					onClick={() => setCorrectIndex(index - 1)}
+					checkOver={setKeysFocus}
+					onClick={() => {
+						setIncrement(-1);
+					}}
+					hasFocus={increment < 0}
+					keysFocus={keysFocus}
 				/>
 				<FlipButton
 					text="Next"
+					arrow="-&gt;"
 					description="Show next word"
-					onClick={() => setCorrectIndex(index + 1)}
+					checkOver={setKeysFocus}
+					onClick={() => {
+						setIncrement(+1);
+					}}
+					hasFocus={increment > 0}
+					keysFocus={keysFocus}
 				/>
 				<FlipButton
 					text="Export"
+					arrow="&#2197;"
 					description="Upload a list of words to a file for further work with them."
+					checkOver={setKeysFocus}
+					keysFocus={keysFocus}
 				/>
 			</div>
 		</main>

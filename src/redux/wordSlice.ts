@@ -4,6 +4,7 @@ import words from "@/data/B1_Wortliste.json";
 
 interface WordsState {
 	data: string[];
+	vocabulary: [boolean, string][];
 	current: string;
 	index: number;
 	loading: "idle" | "pending" | "succeeded" | "failed";
@@ -11,6 +12,7 @@ interface WordsState {
 
 const initialState = {
 	data: words,
+	vocabulary: [],
 	current: "",
 	index: 0,
 	loading: "idle",

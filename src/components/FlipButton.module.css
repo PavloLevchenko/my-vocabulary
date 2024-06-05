@@ -8,6 +8,7 @@
 	font: inherit;
 	display: inherit;
 	text-align: initial;
+	outline: none;
 }
 
 .card span {
@@ -30,18 +31,18 @@
 }
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
-	.card:hover {
+	.card:focus-visible {
 		background: rgba(var(--card-rgb), 0.1);
 		border: 1px solid rgba(var(--card-border-rgb), 0.15);
 	}
 
-	.card:hover span {
-		transform: translateX(4px);
+	.card:focus-visible span {
+		transform: scale(1.5);
 	}
 }
 
 @media (prefers-reduced-motion) {
-	.card:hover span {
+	.card:focus-visible span {
 		transform: none;
 	}
 }
