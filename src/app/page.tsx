@@ -7,13 +7,13 @@ import { handleKeyDown } from "@/api/slider";
 import React, { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { setWord } from "@/redux/operations";
-import { getWords } from "@/redux/selectors";
+import { getWords, getIndex } from "@/redux/selectors";
 import { FlipButton } from "@/components/FlipButton";
 import { Header } from "@/components/Header";
 
 export default function Home() {
 	//const { data } = useSWR<any>(`wb/snippet/?q=Haus`, fetcher);
-	const [index, setIndex] = useState(0);
+	const [index, setIndex] = useState(useAppSelector(getIndex));
 	const [increment, setIncrement] = useState(0);
 	const [current, setCurrent] = useState("");
 	const [keysFocus, setKeysFocus] = useState(false);
