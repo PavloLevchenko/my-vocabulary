@@ -2,36 +2,25 @@
 
 import styles from "./page.module.css";
 import useSWR from "swr";
-import { fetcher, setCorrectIndex } from "@/api";
+import { fetcher } from "@/api";
 import { handleKeyDown } from "@/api/slider";
 import React, { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { setWord } from "@/redux/operations";
-import { getWords, getIndex } from "@/redux/selectors";
+import useStore from "@/zustand/useStore";
+import { useWordsStore } from "@/zustand/useWordsStore";
 import { FlipButton } from "@/components/FlipButton";
 import { Header } from "@/components/Header";
 
 export default function Home() {
 	//const { data } = useSWR<any>(`wb/snippet/?q=Haus`, fetcher);
-	const [index, setIndex] = useState(useAppSelector(getIndex));
 	const [increment, setIncrement] = useState(0);
-	const [current, setCurrent] = useState("");
 	const [keysFocus, setKeysFocus] = useState(false);
-	const words = useAppSelector(getWords);
-	const dispatch = useAppDispatch();
+	const current = useStore(useWordsStore, state => state.current);
+	const { setIndex } = useWordsStore();
 
 	useEffect(() => {
-		dispatch(setWord(index));
-	}, [dispatch, index]);
-
-	useEffect(() => {
-		setCurrent(words[index]);
-	}, [index, words]);
-
-	useEffect(() => {
-		setIndex(oldIndex => setCorrectIndex(oldIndex, increment, words.length));
+		setIndex(increment);
 		setIncrement(0);
-	}, [increment, words]);
+	}, [increment, setIndex]);
 
 	useEffect(() => {
 		const onKeyDown = (event: any) => setIncrement(handleKeyDown(event));
