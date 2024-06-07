@@ -8,3 +8,10 @@ export const setCorrectIndex = (oldIndex: number, increment: number, length: num
 	newIndex = length > newIndex ? newIndex : length - 1;
 	return newIndex;
 };
+
+export const blober = (vocabulary: Map<string, boolean> | undefined) => {
+	if (vocabulary) {
+		return new Blob([Array.from(vocabulary.keys()).join("\n")], { type: "text/plain" });
+	}
+	return new Blob();
+};

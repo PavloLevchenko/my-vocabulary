@@ -1,5 +1,4 @@
-"use client";
-import { ReactElement, useRef, useState, useEffect } from "react";
+import { ReactElement, useRef, useEffect } from "react";
 import styles from "./FlipButton.module.css";
 
 interface Props {

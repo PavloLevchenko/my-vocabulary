@@ -9,14 +9,16 @@ enum Direction {
 	D = "KeyD",
 }
 
-export const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-	const values: string[] = Object.values(Direction);
-
+const prevent = (event: any, values: string[]) => {
 	if (values.includes(event.code)) {
 		event.preventDefault();
 		event.stopPropagation();
 	}
-	console.log(event.code);
+};
+
+export const handleSchift = (event: React.KeyboardEvent<HTMLElement>) => {
+	prevent(event, Object.values(Direction));
+
 	switch (event.code) {
 		case Direction.Left || Direction.A:
 			return -1;
@@ -24,5 +26,18 @@ export const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
 			return 1;
 		default:
 			return 0;
+	}
+};
+
+export const handleConfirm = (event: React.KeyboardEvent<HTMLElement>) => {
+	prevent(event, Object.values(Direction));
+
+	switch (event.code) {
+		case Direction.Up:
+			return true;
+		case Direction.Down:
+			return false;
+		default:
+			return;
 	}
 };
