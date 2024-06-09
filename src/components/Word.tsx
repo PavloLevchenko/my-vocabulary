@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 import styles from "./Word.module.css";
 import useStore from "@/zustand/useStore";
-import { useWordsStore } from "@/zustand/useWordsStore";
+import { zustandStore } from "@/zustand/zustandStore";
 import useSWR from "swr";
 import { fetcher } from "@/api";
 
 export const Word = (): ReactElement => {
-	const word = useStore(useWordsStore, state => state.current);
+	const word = useStore(zustandStore, state => state.current);
 	if (word) {
 		const [text, confirm] = word;
 		return (

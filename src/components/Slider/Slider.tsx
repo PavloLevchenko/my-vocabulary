@@ -2,23 +2,29 @@ import styles from "./Slider.module.css";
 import { handleSchift, handleConfirm } from "@/api/slider";
 import React, { useEffect, useState } from "react";
 import useStore from "@/zustand/useStore";
-import { useWordsStore } from "@/zustand/useWordsStore";
+import { zustandStore } from "@/zustand/zustandStore";
 import { FlipButton } from "@/components";
 import { blober } from "@/api";
 
 export const Slider = () => {
-	const [increment, setIncrement] = useState(0);
+	const [increment, setIncrement] = useState<number | undefined>(0);
 	const [confirm, setConfirm] = useState<boolean | undefined>();
 	const [keysFocus, setKeysFocus] = useState(false);
-	const { setIndex, resetIndex, setKnowledge } = useWordsStore();
+	const [downloadLink, setDownloadLink] = useState<string | undefined>();
+	const { setIndex, resetIndex, setKnowledge } = zustandStore();
 
-	const vocabulary = useStore(useWordsStore, state => state.vocabulary);
-	const words = blober(vocabulary);
-	const downloadLink = window.URL.createObjectURL(words);
+	const vocabulary = useStore(zustandStore, state => state.vocabulary);
 
 	useEffect(() => {
-		setIndex(increment);
-		setIncrement(0);
+		const words = blober(vocabulary);
+		setDownloadLink(window.URL.createObjectURL(words));
+	}, [vocabulary]);
+
+	useEffect(() => {
+		if (increment !== undefined) {
+			setIndex(increment);
+			setIncrement(undefined);
+		}
 	}, [increment, setIndex]);
 
 	useEffect(() => {
@@ -58,7 +64,7 @@ export const Slider = () => {
 				onClick={() => {
 					setIncrement(-1);
 				}}
-				hasFocus={increment < 0}
+				hasFocus={(increment as number) < 0}
 				keysFocus={keysFocus}
 			/>
 			<FlipButton
@@ -69,7 +75,7 @@ export const Slider = () => {
 				onClick={() => {
 					setIncrement(+1);
 				}}
-				hasFocus={increment > 0}
+				hasFocus={(increment as number) > 0}
 				keysFocus={keysFocus}
 			/>
 			<a download="list.txt" href={downloadLink}>

@@ -25,7 +25,7 @@ export const handleSchift = (event: React.KeyboardEvent<HTMLElement>) => {
 		case Direction.Right || Direction.D:
 			return 1;
 		default:
-			return 0;
+			return;
 	}
 };
 
