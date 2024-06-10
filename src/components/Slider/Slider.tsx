@@ -1,24 +1,15 @@
 import styles from "./Slider.module.css";
 import { handleSchift, handleConfirm } from "@/api/slider";
-import React, { useEffect, useState } from "react";
-import useStore from "@/zustand/useStore";
+import { useEffect, useState } from "react";
 import { zustandStore } from "@/zustand/zustandStore";
 import { FlipButton } from "@/components";
-import { blober } from "@/api";
+import Link from "next/link";
 
 export const Slider = () => {
 	const [increment, setIncrement] = useState<number | undefined>(0);
 	const [confirm, setConfirm] = useState<boolean | undefined>();
 	const [keysFocus, setKeysFocus] = useState(false);
-	const [downloadLink, setDownloadLink] = useState<string | undefined>();
 	const { setIndex, resetIndex, setKnowledge } = zustandStore();
-
-	const vocabulary = useStore(zustandStore, state => state.vocabulary);
-
-	useEffect(() => {
-		const words = blober(vocabulary);
-		setDownloadLink(window.URL.createObjectURL(words));
-	}, [vocabulary]);
 
 	useEffect(() => {
 		if (increment !== undefined) {
@@ -78,7 +69,8 @@ export const Slider = () => {
 				hasFocus={(increment as number) > 0}
 				keysFocus={keysFocus}
 			/>
-			<a download="list.txt" href={downloadLink}>
+
+			<Link href="?modal=true">
 				<FlipButton
 					text="Export"
 					arrow="&#2197;"
@@ -86,7 +78,7 @@ export const Slider = () => {
 					checkOver={setKeysFocus}
 					keysFocus={keysFocus}
 				/>
-			</a>
+			</Link>
 		</div>
 	);
 };

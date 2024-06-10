@@ -11,7 +11,16 @@ export const setCorrectIndex = (oldIndex: number, increment: number, length: num
 
 export const blober = (vocabulary: Map<string, boolean> | undefined) => {
 	if (vocabulary) {
-		return new Blob([Array.from(vocabulary.keys()).join("\n")], { type: "text/plain" });
+		const familiarWords = Object.entries(vocabulary)
+			.filter(w => w[1] === true)
+			.keys();
+		const unfamiliarWords = Object.entries(vocabulary)
+			.filter(w => w[1] === false)
+			.keys();
+		return {
+			familiar: new Blob([Array.from(familiarWords).join("\n")], { type: "text/plain" }),
+			unfamiliar: new Blob([Array.from(unfamiliarWords).join("\n")], { type: "text/plain" }),
+		};
 	}
-	return new Blob();
+	return { familiar: new Blob(), unfamiliar: new Blob() };
 };
