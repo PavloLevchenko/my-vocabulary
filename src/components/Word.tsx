@@ -7,6 +7,9 @@ import { fetcher } from "@/api";
 
 export const Word = (): ReactElement => {
 	const word = useStore(zustandStore, state => state.current);
+	const vocabularyCount = useStore(zustandStore, state => state.vocabulary.size);
+	const wordsCount = useStore(zustandStore, state => state.data.length);
+
 	if (word) {
 		const [text, confirm] = word;
 		return (
@@ -14,6 +17,9 @@ export const Word = (): ReactElement => {
 				<p>{text}</p>
 				<p className={[confirm ? styles.familiar : styles.unfamiliar].join(" ")}>
 					{confirm ? "know" : "don't know"}
+				</p>
+				<p>
+					{vocabularyCount} of {wordsCount}
 				</p>
 				{/* <div >{data?.[0]?.url}</div> */}
 			</div>

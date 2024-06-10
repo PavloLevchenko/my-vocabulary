@@ -43,21 +43,20 @@ export const wordsPersistStore = (persist as WordPersist)(
 	(set, get) => ({
 		...initState,
 		setIndex: increment => {
-			set(() => {
+			set(state => {
 				const newIndex = setCorrectIndex(get().index, increment, get().data.length);
 
 				const vocabulary = get().vocabulary;
 				const word = get().data[newIndex];
 
-				let ok;
+				let ok = true;
 				if (vocabulary.has(word)) {
-					ok = vocabulary.get(word);
-				} else {
-					ok = true;
+					ok = vocabulary.get(word) === true;
 				}
 				return {
 					index: newIndex,
 					current: [word, ok],
+					vocabulary: new Map(state.vocabulary).set(word, ok),
 				};
 			});
 		},
