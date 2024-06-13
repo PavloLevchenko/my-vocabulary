@@ -1,0 +1,13 @@
+.list {
+	text-align: center;
+	margin: 5px;
+}
+.pointless {
+	list-style-type: none;
+}
+.link {
+	text-decoration: underline;
+}
+.unfound {
+	text-align: center;
+}

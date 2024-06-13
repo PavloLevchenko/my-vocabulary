@@ -1,0 +1,17 @@
+{
+	"api": {
+		"api_key": "GOOGLE API KEY HERE",
+		"client_id": "GOOGLE CLIENT ID HERE",
+		"client_secret": "GOOGLE CLIENT SECRET HERE",
+		"scopes": "https://www.googleapis.com/auth/drive.drive.appdata"
+	},
+	"components": {
+		"HeaderImage": {
+			"homepage_url": "http://localhost:3000/",
+			"logo_url": "https://logovtor.com/wp-content/uploads/2021/06/some-logo-vector.png",
+			"logo_alt": "My Logo",
+			"logo_width": "300px",
+			"logo_color": "#5b777d"
+		}
+	}
+}

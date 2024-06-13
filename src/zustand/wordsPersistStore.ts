@@ -10,14 +10,14 @@ const NAME = "words";
 interface State {
 	data: string[];
 	vocabulary: Map<string, boolean>;
-	current: [string, boolean?];
+	current: [text: string, confirm?: boolean];
 	index: number;
 }
 
 const initState: State = {
 	data: words,
 	vocabulary: new Map<string, boolean>(),
-	current: [""],
+	current: ["", true],
 	index: 0,
 };
 

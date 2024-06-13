@@ -2,7 +2,7 @@
 
 const API_URL = process.env.API_URL;
 
-const nextConfig = {
+/* const nextConfig = {
 	async rewrites() {
 		return [
 			{
@@ -11,6 +11,6 @@ const nextConfig = {
 			},
 		];
 	},
-};
+}; 
 
-export default nextConfig;
+export default nextConfig;*/

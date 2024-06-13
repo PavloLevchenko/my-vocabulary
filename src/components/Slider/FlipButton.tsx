@@ -30,7 +30,7 @@ export const FlipButton = ({
 
 	return (
 		<button
-			className={[styles.card].join(" ")}
+			className={styles.card}
 			type="button"
 			onClick={onClick}
 			ref={ref}
