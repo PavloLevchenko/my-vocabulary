@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://de.wikipedia.org";
+const baseURL = "https://en.wiktionary.org/api/rest_v1/page/definition";
 axios.defaults.baseURL = baseURL;
 export const fetcher = (url: string | undefined) => url && axios.get(url).then(res => res.data);
 
@@ -16,21 +16,15 @@ export const stripTags = (text: string) => {
 	return content || "";
 };
 
-export const prepareDefinitions = (
-	search: [{ title: string; snippet: string; pageid: number }],
-	word: string,
-) => {
-	let definitions: { def: string; url: string }[] = [];
-
-	if (search) {
-		search.forEach(value => {
-			if (value.title.toUpperCase() === word.toUpperCase()) {
-				const url = baseURL + "/wiki?curid=" + value.pageid;
-				definitions.push({ def: stripTags(value.snippet), url });
-			}
+export const prepareDefinitions = (defs: [{ definition: string }], title: string) => {
+	let definitions: { def: string }[] = [];
+	const url = "https://de.wiktionary.org/wiki/" + title;
+	if (defs) {
+		defs.forEach(value => {
+			definitions.push({ def: stripTags(value.definition) });
 		});
 	}
-	return definitions;
+	return { definitions, url };
 };
 
 export const blober = (vocabulary: Map<string, boolean> | undefined) => {

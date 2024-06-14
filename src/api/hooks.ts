@@ -2,6 +2,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWRImmutable from "swr";
 import { fetcher, prepareDefinitions } from "@/api";
+import { url } from "inspector";
 
 export const useEscNav = () => {
 	const pathname = usePathname();
@@ -29,8 +30,8 @@ export const useEscNav = () => {
 export const useDefinition = (word: [text: string, confirm?: boolean] | undefined) => {
 	const [confirm, setConfirm] = useState(true);
 	const [text, setText] = useState("");
-	const [urlString, setUrlString] = useState("");
-	const [definitions, setDefinitions] = useState<{ def: string; url: string }[]>();
+	const [url, setUrl] = useState("");
+	const [definitions, setDefinitions] = useState<{ def: string }[]>();
 
 	useEffect(() => {
 		if (word) {
@@ -39,17 +40,13 @@ export const useDefinition = (word: [text: string, confirm?: boolean] | undefine
 		}
 	}, [word]);
 
-	useEffect(() => {
-		if (text.length > 2) {
-			setUrlString("/w/api.php?origin=*&action=query&list=search&format=json&srsearch=" + text);
-		}
-	}, [text]);
-
-	const { data, error, isLoading } = useSWRImmutable(urlString, fetcher);
+	const { data, error, isLoading } = useSWRImmutable(text, fetcher);
 	const isError = error;
 	useEffect(() => {
-		setDefinitions(prepareDefinitions(data?.query?.search, text));
+		const prepared = prepareDefinitions(data?.de[0]?.definitions, text);
+		setDefinitions(prepared.definitions);
+		setUrl(prepared.url);
 	}, [data, text]);
 
-	return [isLoading, isError, confirm, text, definitions];
+	return [isLoading, isError, confirm, text, definitions, url];
 };

@@ -1,13 +1,17 @@
 .list {
-	text-align: center;
 	margin: 5px;
+	background: inherit;
+	border: none;
 }
-.pointless {
-	list-style-type: none;
+
+.def {
+	font-style: italic;
 }
+
 .link {
 	text-decoration: underline;
 }
+
 .unfound {
 	text-align: center;
 }

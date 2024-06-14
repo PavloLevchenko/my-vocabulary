@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import styles from "./Word.module.css";
 import useStore from "@/zustand/useStore";
 import { zustandStore } from "@/zustand/zustandStore";
@@ -9,7 +9,7 @@ export const Word = (): ReactElement => {
 	const word = useStore(zustandStore, state => state.current);
 	const vocabularyCount = useStore(zustandStore, state => state.vocabulary.size);
 	const wordsCount = useStore(zustandStore, state => state.data.length);
-	const [isLoading, isError, confirm, text, definitions] = useDefinition(word);
+	const [isLoading, isError, confirm, text, definitions, url] = useDefinition(word);
 
 	return word ? (
 		<div className={styles.center}>
@@ -21,7 +21,7 @@ export const Word = (): ReactElement => {
 				{vocabularyCount} of {wordsCount}
 			</p>
 			{isLoading && <div>Loading...</div>}
-			{!isLoading && !isError && <WordDefinitions definitions={definitions} />}
+			{!isLoading && !isError && <WordDefinitions definitions={definitions} url={url} />}
 		</div>
 	) : (
 		<div className={styles.center}></div>
