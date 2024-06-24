@@ -7,6 +7,7 @@ interface Props {
 	description: string;
 	keysFocus?: boolean;
 	hasFocus?: boolean;
+	disable?: boolean;
 	checkOver: Function;
 	onClick?: React.MouseEventHandler;
 }
@@ -17,6 +18,7 @@ export const FlipButton = ({
 	description,
 	keysFocus,
 	hasFocus,
+	disable,
 	onClick,
 	checkOver,
 }: Props): ReactElement => {
@@ -32,6 +34,7 @@ export const FlipButton = ({
 		<button
 			className={styles.card}
 			type="button"
+			disabled={disable}
 			onClick={onClick}
 			ref={ref}
 			onMouseOver={event => {

@@ -1,6 +1,7 @@
 import styles from "./Slider.module.css";
 import { handleSchift, handleConfirm } from "@/api/slider";
 import { useEffect, useState } from "react";
+import useStore from "@/zustand/useStore";
 import { zustandStore } from "@/zustand/zustandStore";
 import { FlipButton } from "@/components";
 import Link from "next/link";
@@ -10,6 +11,7 @@ export const Slider = () => {
 	const [confirm, setConfirm] = useState<boolean | undefined>();
 	const [keysFocus, setKeysFocus] = useState(false);
 	const { setIndex, resetIndex, setKnowledge } = zustandStore();
+	const sync = useStore(zustandStore, state => state.sync);
 
 	useEffect(() => {
 		if (increment !== undefined) {
@@ -46,6 +48,7 @@ export const Slider = () => {
 				onClick={() => resetIndex()}
 				checkOver={setKeysFocus}
 				keysFocus={keysFocus}
+				disable={sync}
 			/>
 			<FlipButton
 				text="Prevew"
@@ -57,6 +60,7 @@ export const Slider = () => {
 				}}
 				hasFocus={(increment as number) < 0}
 				keysFocus={keysFocus}
+				disable={sync}
 			/>
 			<FlipButton
 				text="Next"
@@ -68,6 +72,7 @@ export const Slider = () => {
 				}}
 				hasFocus={(increment as number) > 0}
 				keysFocus={keysFocus}
+				disable={sync}
 			/>
 
 			<Link href="?modal=true">
@@ -77,6 +82,7 @@ export const Slider = () => {
 					description="Upload a list of words to a file for further work with them."
 					checkOver={setKeysFocus}
 					keysFocus={keysFocus}
+					disable={sync}
 				/>
 			</Link>
 		</div>

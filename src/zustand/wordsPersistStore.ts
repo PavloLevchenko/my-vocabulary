@@ -12,6 +12,7 @@ interface State {
 	vocabulary: Map<string, boolean>;
 	current: [text: string, confirm?: boolean];
 	index: number;
+	sync: boolean;
 }
 
 const initState: State = {
@@ -19,6 +20,7 @@ const initState: State = {
 	vocabulary: new Map<string, boolean>(),
 	current: ["", true],
 	index: 0,
+	sync: true,
 };
 
 export type WordState = State & WordsActions;
@@ -36,7 +38,9 @@ type WordPersist = (
 interface WordsActions {
 	setIndex: (by: number) => void;
 	setKnowledge: (ok: boolean) => void;
+	setVocabulary: (vocabulary: Map<string, boolean>) => void;
 	resetIndex: () => void;
+	setSync: (sync: boolean) => void;
 }
 
 export const wordsPersistStore = (persist as WordPersist)(
@@ -70,8 +74,29 @@ export const wordsPersistStore = (persist as WordPersist)(
 				};
 			});
 		},
+		setVocabulary: vocabulary => {
+			set(() => {
+				let index = 0;
+				let current: [string, boolean] = ["", true];
+				get().data.every((word, ind) => {
+					if (!vocabulary.has(word)) {
+						index = ind;
+						current[0] = word;
+						return false;
+					}
+					return true;
+				});
+
+				return {
+					index,
+					current,
+					vocabulary,
+				};
+			});
+		},
 		resetIndex: () =>
 			set({ index: 0, current: [get().data[0], true], vocabulary: new Map<string, boolean>() }),
+		setSync: sync => set({ sync }),
 	}),
 	{
 		name: NAME,

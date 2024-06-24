@@ -3,7 +3,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { PropsWithChildren, useState, useEffect } from "react";
 import { GoogleSignContainer } from "./GoogleSignContainer";
-import { ExtSession } from "./GoogleDriveApi";
+import { ExtSession } from "./GoogleDriveSync";
 
 const GoogleSignOn = ({ children }: PropsWithChildren) => {
 	const { data, status } = useSession();

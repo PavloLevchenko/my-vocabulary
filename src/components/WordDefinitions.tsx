@@ -4,29 +4,39 @@ import styles from "./WordDefinitions.module.css";
 interface Props {
 	definitions: { def: string }[] | undefined;
 	url: string;
+	loading?: boolean;
 }
 
-export const WordDefinitions = ({ definitions, url }: Props): ReactElement => {
+export const WordDefinitions = ({ definitions, url, loading }: Props): ReactElement => {
+	if (loading) {
+		return (
+			<div className={styles.container}>
+				<p className={styles.load}>Loading...</p>
+			</div>
+		);
+	}
+	const one = definitions?.length === 1;
 	return definitions?.length ? (
-		<div>
-			<select className={styles.list}>
+		<div className={styles.container}>
+			<ol className={styles.list}>
 				{definitions.map((value, index, array) => {
-					const ind = array.length > 1 ? index + 1 : "";
 					if (!value.def) {
 						return;
 					}
 					return (
-						<option className={styles.def} key={index}>
-							{ind + "-" + value.def + ","} &nbsp;
-						</option>
+						<li className={[styles.def, one && styles.undecored].join(" ")} key={index}>
+							{value.def} &nbsp;
+						</li>
 					);
 				})}
-			</select>
+			</ol>
 			<a href={url} className={styles.link} target="_blank" rel="noopener">
-				Wiki
+				Wiki* {!one && definitions?.length}
 			</a>
 		</div>
 	) : (
-		<div className={styles.unfound}>Not found</div>
+		<div className={styles.container}>
+			<p className={styles.unfound}>Not found</p>
+		</div>
 	);
 };

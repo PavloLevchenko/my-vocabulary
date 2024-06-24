@@ -10,12 +10,15 @@
 	text-align: center;
 	margin: 5px;
 }
+
 .familiar {
 	color: var(--word-primary);
 }
+
 .unfamiliar {
 	color: var(--word-secondary);
 }
+
 /* Mobile */
 @media (max-width: 700px) {
 	.center {

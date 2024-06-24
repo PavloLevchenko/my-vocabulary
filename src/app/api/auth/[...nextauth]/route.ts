@@ -2,9 +2,11 @@ import NextAuth, { Account, CallbacksOptions, NextAuthOptions, Profile } from "n
 import { JWT } from "next-auth/jwt";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 import { OAuthUserConfig } from "next-auth/providers/oauth";
+import { OAuth2Client } from "google-auth-library";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID as string;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+const redirectUri = JSON.parse(process.env.GOOGLE_REDIRECT_URIS as string);
 const scope: string[] = JSON.parse(process.env.GOOGLE_SCOPES as string);
 const secret = process.env.NEXTAUTH_SECRET;
 const access_type = process.env.GOOGLE_ACCESS_TYPE || "offline";
@@ -14,13 +16,16 @@ const response_type = process.env.GOOGLE_RESPONSE_TYPE || "code";
 const GOOGLE_AUTHORIZATION_URL =
 	"https://accounts.google.com/o/oauth2/v2/auth?" +
 	new URLSearchParams({
-		prompt,
+		prompt: "none",
 		access_type,
 		response_type,
 	});
 
 async function refreshAccessToken(token: JWT) {
 	try {
+		if (!token.refresh_token) {
+			throw new Error("refresh_token");
+		}
 		const url =
 			"https://oauth2.googleapis.com/token?" +
 			new URLSearchParams({
@@ -94,11 +99,11 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> = {
 		// Persist the OAuth access_token to the token right after signin
 		if (account && user && account.provider === "google") {
 			const expires_at = account.expires_at as number;
-			console.log(account);
 
 			token.access_token = account.access_token;
 			token.access_token_expires = new Date(expires_at * 1000);
 			token.refresh_token = account.refresh_token;
+			//console.log(account.refresh_token);
 			return token;
 		}
 		// Return previous token if the access token has not expired yet
@@ -110,12 +115,15 @@ const callbacks: Partial<CallbacksOptions<Profile, Account>> = {
 	},
 	async session({ session, token }) {
 		// Send properties to the client, like an access_token from a provider.
+		const access_token = token.access_token as string;
+		const refresh_token = token.refresh_token as string;
+
 		return {
 			...session,
 			user: {
 				...session.user,
-				refresh_token: token.refresh_token,
-				access_token: token.access_token,
+				refresh_token,
+				access_token,
 			},
 			error: token.error,
 		};

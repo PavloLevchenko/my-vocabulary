@@ -20,8 +20,7 @@ export const Word = (): ReactElement => {
 			<p>
 				{vocabularyCount} of {wordsCount}
 			</p>
-			{isLoading && <div>Loading...</div>}
-			{!isLoading && !isError && <WordDefinitions definitions={definitions} url={url} />}
+			{!isError && <WordDefinitions definitions={definitions} url={url} loading={isLoading} />}
 		</div>
 	) : (
 		<div className={styles.center}></div>
