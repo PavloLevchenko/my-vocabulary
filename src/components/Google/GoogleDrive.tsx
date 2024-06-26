@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getVocabulary, saveVocabulary } from "./GoogleDriveSync";
-import { appFileName, appFileType } from "@/api/GoogleDrive";
+import { getVocabulary, saveVocabulary } from "../../api/googleDriveSync";
+import { appFileName, appFileType } from "@/api/googleDrive";
 import useStore from "@/zustand/useStore";
 import { zustandStore } from "@/zustand/zustandStore";
 

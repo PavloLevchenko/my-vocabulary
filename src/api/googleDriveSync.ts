@@ -14,7 +14,7 @@ import {
 	updateRes,
 	checkIfFolderExist,
 	checkIfFileExist,
-} from "@/api/GoogleDrive";
+} from "@/api/googleDrive";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
