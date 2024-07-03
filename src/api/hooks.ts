@@ -2,7 +2,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWRImmutable from "swr";
 import { fetcher, prepareDefinitions } from "@/api";
-import { url } from "inspector";
 
 export const useEscNav = () => {
 	const pathname = usePathname();
@@ -43,9 +42,14 @@ export const useDefinition = (word: [text: string, confirm?: boolean] | undefine
 	const { data, error, isLoading } = useSWRImmutable(text, fetcher);
 	const isError = error;
 	useEffect(() => {
-		const prepared = prepareDefinitions(data?.de[0]?.definitions, text);
-		setDefinitions(prepared.definitions);
-		setUrl(prepared.url);
+		if (data?.de) {
+			const prepared = prepareDefinitions(data?.de[0]?.definitions, text);
+			setDefinitions(prepared.definitions);
+			setUrl(prepared.url);
+		} else {
+			setDefinitions([]);
+			setUrl("");
+		}
 	}, [data, text]);
 
 	return [isLoading, isError, confirm, text, definitions, url];
